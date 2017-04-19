@@ -82,6 +82,7 @@ COPY $CONFIG $AUTOUSER
 
 # Install RPMS
 # REMOTE 
+RUN yum -y install which-2.20-7.el7.x86_64
 RUN yum -y install bc
 RUN yum -y install bzip2-libs-1.0.6-13.el7.i686
 RUN yum -y install ed
