@@ -119,4 +119,4 @@ EXPOSE 9331 9331
 EXPOSE 7521 7521
 
 # Define default command to start Oracle Database.
-CMD systemctl start waae_sched.ACE.service
+CMD /etc/rc.d/init.d/waae_sched.ACE start
