@@ -1,17 +1,32 @@
-# LICENSE CDDL 1.0 + GPL 2.0
+# LICENSE EULA with CA Technologies
 #
-# Copyright (c) 1982-2017 Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 1982-2017 CA Technology and/or its affiliates. All rights reserved.
 #
-# ORACLE DOCKERFILES PROJECT
+# JSaaS DOCKER PROJECT
 # --------------------------
-# This is the Dockerfile for Oracle Database 12c Release 1 Enterprise Edition
+# This is the Dockerfile for CA Workload Automation AutoSys Edition 11.3.6.sp5
 #
 # REQUIRED FILES TO BUILD THIS IMAGE
 # ----------------------------------
-# (1) linuxamd64_12102_database_1of2.zip
-#     linuxamd64_12102_database_2of2.zip
-#     Download Oracle Database 12c Release 1 Enterprise Edition for Linux x64
-#     from http://www.oracle.com/technetwork/database/enterprise-edition/downloads/index.html
+#    ca-cs-sockadapter-2.1.41-0.i386.rpm
+#    ca-cs-etpki-3.2.4-1.i386.rpm
+#    ca-lic-01.0080-04.i386.rpm
+#    ca-cs-utils-11.2.15090-0000.i386.rpm
+#    ca-cs-jre-1.5.0-11.i386.rpm
+#    ca-waae-scheduler-11.3.6-919.i386.rpm
+#    ca-waae-common-cs-11.3.6-919.i386.rpm
+#    ca-waae-client-11.3.6-919.i386.rpm
+#    ca-waae-asapi-11.3.6-919.i386.rpm
+#    ca-waae-server-11.3.6-919.i386.rpm
+#    ca-waae-sdk-11.3.6-919.i386.rpm
+#    ca-waae-db-11.3.6-919.i386.rpm
+#    ca-waae-common-sac-11.3.6-919.i386.rpm
+#    ca-waae-common-cs2-11.3.6-919.i386.rpm
+#    ca-waae-common-11.3.6-919.i386.rpm
+#    ca-waae-base-11.3.6-919.i386.rpm
+#    ca-waae-agent-11.3.6-919.i386.rpm
+#     Download CA WA AE Media for Unix and Windows
+#     from http://support.ca.com
 #
 # HOW TO BUILD THIS IMAGE
 # -----------------------
@@ -21,60 +36,86 @@
 #
 # Pull base image
 # ---------------
-FROM oraclelinux:latest
+FROM centos:latest
 
 # Maintainer
 # ----------
-MAINTAINER Gerald Venzl <gerald.venzl@oracle.com>
+MAINTAINER Jonathan McAlroy <jonathan.mcalroy@citi.com>
 
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
-ENV ORACLE_BASE=/opt/oracle \
-    ORACLE_HOME=/opt/oracle/product/12.1.0.2/dbhome_1 \
-    INSTALL_FILE_1="linuxamd64_12102_database_1of2.zip" \
-    INSTALL_FILE_2="linuxamd64_12102_database_2of2.zip" \
-    INSTALL_RSP="db_inst.rsp" \
-    CONFIG_RSP="dbca.rsp.tmpl" \
-    PWD_FILE="setPassword.sh" \
-    PERL_INSTALL_FILE="installPerl.sh" \
-    RUN_FILE="runOracle.sh" \
-    START_FILE="startDB.sh" \
-    CREATE_DB_FILE="createDB.sh" \
-    SETUP_LINUX_FILE="setupLinuxEnv.sh" \
-    CHECK_SPACE_FILE="checkSpace.sh" \
-    INSTALL_DB_BINARIES_FILE="installDBBinaries.sh"
+ENV ENV=VAL
 
 # Use second ENV so that variable get substituted
-ENV INSTALL_DIR=$ORACLE_BASE/install \
-    PATH=$ORACLE_HOME/bin:$ORACLE_HOME/OPatch/:/usr/sbin:$PATH \
-    LD_LIBRARY_PATH=$ORACLE_HOME/lib:/usr/lib \
-    CLASSPATH=$ORACLE_HOME/jlib:$ORACLE_HOME/rdbms/jlib
+ENV ENV=VAL
+
+# ADD RPMs
+# -------------
+ADD RPMS/CCS/RPM/ca-cs-utils-11.2.15090-0000.i386.rpm   ./ca-cs-utils-11.2.15090-0000.i386.rpm
+ADD RPMS/CCS/RPM/ca-cs-etpki-3.2.4-1.i386.rpm   ./ca-cs-etpki-3.2.4-1.i386.rpm
+ADD RPMS/CCS/RPM/ca-cs-jre-1.5.0-11.i386.rpm    ./ca-cs-jre-1.5.0-11.i386.rpm
+ADD RPMS/CCS/RPM/ca-cs-sockadapter-2.1.41-0.i386.rpm    ./ca-cs-sockadapter-2.1.41-0.i386.rpm
+ADD RPMS/CCS/RPM/ca-lic-01.0080-04.i386.rpm     ./ca-lic-01.0080-04.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-base-11.3.6-919.i386.rpm      ./ca-waae-base-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-common-11.3.6-919.i386.rpm    ./ca-waae-common-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-common-cs-11.3.6-919.i386.rpm ./ca-waae-common-cs-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-common-cs2-11.3.6-919.i386.rpm        ./ca-waae-common-cs2-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-common-sac-11.3.6-919.i386.rpm        ./ca-waae-common-sac-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-agent-11.3.6-919.i386.rpm     ./ca-waae-agent-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-asapi-11.3.6-919.i386.rpm     ./ca-waae-asapi-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-client-11.3.6-919.i386.rpm    ./ca-waae-client-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-db-11.3.6-919.i386.rpm        ./ca-waae-db-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-scheduler-11.3.6-919.i386.rpm ./ca-waae-scheduler-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-sdk-11.3.6-919.i386.rpm       ./ca-waae-sdk-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-server-11.3.6-919.i386.rpm    ./ca-waae-server-11.3.6-919.i386.rpm
+ADD RPMS/oraclient/oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.i386.rpm ./oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.i386.rpm
+ADD RPMS/oraclient/oracle-instantclient11.2-basic-11.2.0.4.0-1.i386.rpm ./oracle-instantclient11.2-basic-11.2.0.4.0-1.i386.rpm
 
 # Copy binaries
 # -------------
-COPY $INSTALL_FILE_1 $INSTALL_FILE_2 $INSTALL_RSP $PERL_INSTALL_FILE $SETUP_LINUX_FILE $CHECK_SPACE_FILE $INSTALL_DB_
-BINARIES_FILE $INSTALL_DIR/
-COPY $RUN_FILE $START_FILE $CREATE_DB_FILE $CONFIG_RSP $PWD_FILE $ORACLE_BASE/
+COPY $CONFIGSCRIPT $INSTALL_DIR/
 
-RUN chmod ug+x $INSTALL_DIR/*.sh && \
-    sync && \
-    $INSTALL_DIR/$CHECK_SPACE_FILE && \
-    $INSTALL_DIR/$SETUP_LINUX_FILE
+# Copy flatfiles
+# --------------
+COPY $TNSNAMES $TNS_ADMIN/
+COPY $CONFIG $AUTOUSER
 
-# Install DB software binaries
-USER oracle
-RUN $INSTALL_DIR/$INSTALL_DB_BINARIES_FILE EE
+# Install RPMS
+# REMOTE 
+RUN yum -y install bc
+RUN yum -y install bzip2-libs-1.0.6-13.el7.i686
+RUN yum -y install ed
+RUN yum -y install libstdc++-4.8.5-11.el7.i686
+RUN yum -y install ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/compat-libstdc++-33-3.2.3-72.el7.i686.rpm
+RUN yum -y install libaio-0.3.109-13.el7.i686
 
-USER root
-RUN $ORACLE_BASE/oraInventory/orainstRoot.sh && \
-    $ORACLE_HOME/root.sh && \
-    rm -rf $INSTALL_DIR
+# LOCAL - Do Not Change Order
+RUN rpm -i ca-cs-utils-11.2.15090-0000.i386.rpm
+RUN rpm -i ca-cs-etpki-3.2.4-1.i386.rpm
+RUN rpm -i ca-cs-jre-1.5.0-11.i386.rpm
+RUN rpm -i ca-cs-sockadapter-2.1.41-0.i386.rpm
+RUN rpm -i ca-lic-01.0080-04.i386.rpm
+RUN rpm -i ca-waae-base-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-common-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-common-cs-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-common-cs2-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-common-sac-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-agent-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-asapi-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-client-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-db-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-scheduler-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-sdk-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-server-11.3.6-919.i386.rpm
 
-USER oracle
-WORKDIR /home/oracle
+# Install DB software RPMS
+RUN rpm -i ./oracle-instantclient11.2-basic-11.2.0.4.0-1.i386.rpm
+RUN rpm -i ./oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.i386.rpm
 
-VOLUME ["$ORACLE_BASE/oradata"]
-EXPOSE 1521 5500
+EXPOSE 7331 7331
+EXPOSE 8331 8331
+EXPOSE 9331 9331
+EXPOSE 7521 7521
 
 # Define default command to start Oracle Database.
-CMD $ORACLE_BASE/$RUN_FILE
+CMD systemctl start waae_sched.ACE.service
