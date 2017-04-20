@@ -1,0 +1,154 @@
+# LICENSE EULA with CA Technologies
+#
+# Copyright (c) 1982-2017 CA Technology and/or its affiliates. All rights reserved.
+#
+# JSaaS DOCKER PROJECT
+# --------------------------
+# This is the Dockerfile for CA Workload Automation AutoSys Edition 11.3.6.sp5
+#
+# REQUIRED FILES TO BUILD THIS IMAGE
+# ----------------------------------
+#    ca-cs-sockadapter-2.1.41-0.i386.rpm
+#    ca-cs-etpki-3.2.4-1.i386.rpm
+#    ca-lic-01.0080-04.i386.rpm
+#    ca-cs-utils-11.2.15090-0000.i386.rpm
+#    ca-cs-jre-1.5.0-11.i386.rpm
+#    ca-waae-scheduler-11.3.6-919.i386.rpm
+#    ca-waae-common-cs-11.3.6-919.i386.rpm
+#    ca-waae-client-11.3.6-919.i386.rpm
+#    ca-waae-asapi-11.3.6-919.i386.rpm
+#    ca-waae-server-11.3.6-919.i386.rpm
+#    ca-waae-sdk-11.3.6-919.i386.rpm
+#    ca-waae-db-11.3.6-919.i386.rpm
+#    ca-waae-common-sac-11.3.6-919.i386.rpm
+#    ca-waae-common-cs2-11.3.6-919.i386.rpm
+#    ca-waae-common-11.3.6-919.i386.rpm
+#    ca-waae-base-11.3.6-919.i386.rpm
+#    ca-waae-agent-11.3.6-919.i386.rpm
+#     Download CA WA AE Media for Unix and Windows
+#     from http://support.ca.com
+#
+# HOW TO BUILD THIS IMAGE
+# -----------------------
+# Put all downloaded files in the same directory as this Dockerfile
+# Run:
+#      $ docker build -t oracle/database:12.1.0.2-ee .
+#
+# Pull base image
+# ---------------
+FROM centos:latest
+
+# Maintainer
+# ----------
+MAINTAINER Jonathan McAlroy <jonathan.mcalroy@citi.com>
+
+# Environment variables required for this build (do NOT change)
+# -------------------------------------------------------------
+
+# Use second ENV so that variable get substituted
+ENV INSTANCE=ACE
+ENV AUTOSERV=ACE
+ENV AUTOSYS=/opt/CA/WorkloadAutomationAE/autosys
+ENV ISDBGACTIV=OFF
+ENV AUTOUSER=/opt/CA/WorkloadAutomationAE/autouser.$INSTANCE
+ENV CASHCOMP=/opt/CA/SharedComponents
+ENV CSAM_SOCKADAPTER=/opt/CA/SharedComponents/Csam/SockAdapter
+ENV ORACLE_HOME=/usr/lib/oracle/11.2/client
+ENV TNS_ADMIN=/opt/oraClient/product/11.2/client_1/network/admin
+ENV PATH=$AUTOSYS/bin:$ORACLE_HOME/bin:$PATH
+ENV LD_LIBRARY_PATH=/opt/CA/WorkloadAutomationAE/autosys/lib:/opt/CA/SharedComponents/Csam/SockAdapter/lib:/opt/CA/CAlib:/usr/lib/oracle/11.2/client/lib:/lib
+
+# ADD RPMs
+# -------------
+ADD RPMS/CCS/RPM/ca-cs-utils-11.2.15090-0000.i386.rpm   ./ca-cs-utils-11.2.15090-0000.i386.rpm
+ADD RPMS/CCS/RPM/ca-cs-etpki-3.2.4-1.i386.rpm   ./ca-cs-etpki-3.2.4-1.i386.rpm
+ADD RPMS/CCS/RPM/ca-cs-jre-1.5.0-11.i386.rpm    ./ca-cs-jre-1.5.0-11.i386.rpm
+ADD RPMS/CCS/RPM/ca-cs-sockadapter-2.1.41-0.i386.rpm    ./ca-cs-sockadapter-2.1.41-0.i386.rpm
+ADD RPMS/CCS/RPM/ca-lic-01.0080-04.i386.rpm     ./ca-lic-01.0080-04.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-base-11.3.6-919.i386.rpm      ./ca-waae-base-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-common-11.3.6-919.i386.rpm    ./ca-waae-common-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-common-cs-11.3.6-919.i386.rpm ./ca-waae-common-cs-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-common-cs2-11.3.6-919.i386.rpm        ./ca-waae-common-cs2-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-common-sac-11.3.6-919.i386.rpm        ./ca-waae-common-sac-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-agent-11.3.6-919.i386.rpm     ./ca-waae-agent-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-asapi-11.3.6-919.i386.rpm     ./ca-waae-asapi-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-client-11.3.6-919.i386.rpm    ./ca-waae-client-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-db-11.3.6-919.i386.rpm        ./ca-waae-db-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-scheduler-11.3.6-919.i386.rpm ./ca-waae-scheduler-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-sdk-11.3.6-919.i386.rpm       ./ca-waae-sdk-11.3.6-919.i386.rpm
+ADD RPMS/WorkloadAutomationAE/RPM/ca-waae-server-11.3.6-919.i386.rpm    ./ca-waae-server-11.3.6-919.i386.rpm
+ADD RPMS/oraclient/oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.i386.rpm ./oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.i386.rpm
+ADD RPMS/oraclient/oracle-instantclient11.2-basic-11.2.0.4.0-1.i386.rpm ./oracle-instantclient11.2-basic-11.2.0.4.0-1.i386.rpm
+
+# Copy binaries
+# -------------
+COPY $CONFIGSCRIPT $INSTALL_DIR/
+
+# Copy flatfiles
+# --------------
+COPY $TNSNAMES $TNS_ADMIN/
+COPY $CONFIG $AUTOUSER
+
+# Install RPMS
+# REMOTE
+RUN yum -y install which-2.20-7.el7.x86_64
+RUN yum -y install bc
+RUN yum -y install bzip2-libs-1.0.6-13.el7.i686
+RUN yum -y install ed
+RUN yum -y install libstdc++-4.8.5-11.el7.i686
+RUN yum -y install ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/compat-libstdc++-33-3.2.3-72.el7.i686.rpm
+RUN yum -y install libaio-0.3.109-13.el7.i686
+
+# LOCAL - Do Not Change Order
+RUN rpm -i ca-cs-utils-11.2.15090-0000.i386.rpm
+RUN rpm -i ca-cs-etpki-3.2.4-1.i386.rpm
+RUN rpm -i ca-cs-jre-1.5.0-11.i386.rpm
+RUN rpm -i ca-cs-sockadapter-2.1.41-0.i386.rpm
+RUN rpm -i ca-lic-01.0080-04.i386.rpm
+RUN rpm -i ca-waae-base-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-common-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-common-cs-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-common-cs2-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-common-sac-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-agent-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-asapi-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-client-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-db-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-scheduler-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-sdk-11.3.6-919.i386.rpm
+RUN rpm -i ca-waae-server-11.3.6-919.i386.rpm
+
+# Install DB software RPMS
+RUN rpm -i ./oracle-instantclient11.2-basic-11.2.0.4.0-1.i386.rpm
+RUN rpm -i ./oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.i386.rpm
+
+# Copy Config Files
+# ------------------
+
+COPY CONFIGS/waae_sched.ACE /etc/rc.d/init.d/waae_sched.ACE
+COPY CONFIGS/waae_server.ACE /etc/rc.d/init.d/waae_server.ACE
+COPY CONFIGS/autosys.sh.DOCKER /opt/CA/WorkloadAutomationAE/autouser.ACE/autosys.sh.DOCKER
+COPY CONFIGS/config.ACE /opt/CA/WorkloadAutomationAE/autouser.ACE/config.ACE
+COPY CONFIGS/citi_eventor /opt/CA/WorkloadAutomationAE/autosys/bin
+ADD CONFIGS/CAPKI.tar /opt/CA/SharedComponents/
+
+# EXPOSED PORTS
+# -------------
+EXPOSE 7331 7331
+EXPOSE 8331 8331
+EXPOSE 9331 9331
+EXPOSE 7521 7521
+
+RUN ln -sf /usr/lib/oracle/11.2/client/lib/libclntsh.so.11.1 /usr/lib/oracle/11.2/client/lib/libclntsh.so
+#Capture Event Demon Log to std out
+#RUN ln -sf /dev/stdout /opt/CA/WorkloadAutomationAE/autouser.ACE/out/event_demon.ACE
+
+# FILE OWNER
+# ----------
+USER root
+RUN groupadd autosys;useradd autosys -m -g autosys
+RUN chown -R autosys:autosys /opt/CA/WorkloadAutomationAE
+RUN chmod -R 755 /opt/CA/WorkloadAutomationAE
+
+# Define default command to start AutoSys Sched.
+CMD /opt/CA/WorkloadAutomationAE/autosys/bin/citi_eventor
