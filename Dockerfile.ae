@@ -47,7 +47,7 @@ MAINTAINER Jonathan McAlroy <jonathan.mcalroy@citi.com>
 ENV ENV=VAL
 
 # Use second ENV so that variable get substituted
-ENV ENV=VAL
+ENV INSTANCE=ACE
 
 # ADD RPMs
 # -------------
@@ -81,7 +81,7 @@ COPY $TNSNAMES $TNS_ADMIN/
 COPY $CONFIG $AUTOUSER
 
 # Install RPMS
-# REMOTE 
+# REMOTE
 RUN yum -y install which-2.20-7.el7.x86_64
 RUN yum -y install bc
 RUN yum -y install bzip2-libs-1.0.6-13.el7.i686
@@ -113,10 +113,25 @@ RUN rpm -i ca-waae-server-11.3.6-919.i386.rpm
 RUN rpm -i ./oracle-instantclient11.2-basic-11.2.0.4.0-1.i386.rpm
 RUN rpm -i ./oracle-instantclient11.2-sqlplus-11.2.0.4.0-1.i386.rpm
 
+# Copy Config Files
+# ------------------
+
+COPY CONFIGS/waae_sched.ACE /etc/rc.d/init.d/waae_sched.ACE
+COPY CONFIGS/waae_server.ACE /etc/rc.d/init.d/waae_server.ACE
+COPY CONFIGS/autosys.sh.DOCKER /opt/CA/WorkloadAutomationAE/autouser.ACE/autosys.sh.DOCKER
+COPY CONFIGS/config.ACE /opt/CA/WorkloadAutomationAE/autouser.ACE/config.ACE
+ADD CONFIGS/CAPKI.tar /opt/CA/SharedComponents/
+
+# EXPOSED PORTS
+# -------------
 EXPOSE 7331 7331
 EXPOSE 8331 8331
 EXPOSE 9331 9331
 EXPOSE 7521 7521
 
-# Define default command to start Oracle Database.
+RUN ln -sf /usr/lib/oracle/11.2/client/lib/libclntsh.so.11.1 /usr/lib/oracle/11.2/client/lib/libclntsh.so
+#Capture Event Demon Log to std out
+#RUN ln -sf /dev/stdout /opt/CA/WorkloadAutomationAE/autouser.ACE/out/event_demon.ACE
+
+# Define default command to start AutoSys Sched.
 CMD /etc/rc.d/init.d/waae_sched.ACE start
