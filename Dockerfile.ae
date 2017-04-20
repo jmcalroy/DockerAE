@@ -89,6 +89,7 @@ RUN yum -y install ed
 RUN yum -y install libstdc++-4.8.5-11.el7.i686
 RUN yum -y install ftp://195.220.108.108/linux/centos/7.3.1611/os/x86_64/Packages/compat-libstdc++-33-3.2.3-72.el7.i686.rpm
 RUN yum -y install libaio-0.3.109-13.el7.i686
+RUN yum -y install libuuid-2.23.2-33.el7_3.2.i686
 
 # LOCAL - Do Not Change Order
 RUN rpm -i ca-cs-utils-11.2.15090-0000.i386.rpm
